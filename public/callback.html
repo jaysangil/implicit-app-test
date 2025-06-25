@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>OAuth Callback</title></head>
+<body>
+  <h2>Token Received</h2>
+  <pre id="out">Parsing…</pre>
+  <script>
+    // Grab the fragment after “#” and parse it
+    const params = new URLSearchParams(location.hash.slice(1));
+    document.getElementById('out').textContent = JSON.stringify(Object.fromEntries(params.entries()), null, 2);
+  </script>
+</body>
+</html>
