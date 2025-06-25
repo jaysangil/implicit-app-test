@@ -4,21 +4,30 @@ A minimal demo showing how to exercise the Genesys Cloud OAuth2 Implicit Grant f
 
 ## 📁 Project Structure
 
+```
 implicit-app-test/
 ├── public/
-│ ├── index.html
-│ ├── callback.html
-│ ├── wrong_callback.html
-│ └── styles.css
+│   ├── index.html
+│   ├── callback.html
+│   ├── wrong_callback.html
+│   └── styles.css
 ├── server.js
 ├── .gitignore
 └── README.md
+```
 
 ## 🛠️ Prerequisites
 
 - [Node.js](https://nodejs.org/) v16+  
 - A Genesys Cloud OAuth Client with **Implicit (Token) Grant** enabled  
-  - Whitelist both `http://localhost:8000/callback.html` and `http://localhost:8000/wrong_callback.html` in **Admin → Integrations → OAuth Clients**
+  - Whitelist both:
+
+    ```
+    http://localhost:8000/callback.html
+    http://localhost:8000/wrong_callback.html
+    ```
+
+    under **Admin → Integrations → OAuth Clients**
 
 ## 🚀 Setup & Run
 
@@ -27,50 +36,60 @@ implicit-app-test/
    ```bash
    git clone https://github.com/your-org/implicit-app-test.git
    cd implicit-app-test
+   ```
 
-2. Install dependencies
+2. **Install dependencies**  
 
-npm install
+   ```bash
+   npm install
+   ```
 
-3. Configure your OAuth Client ID
+3. **Configure your OAuth Client ID**  
+   - Open `public/index.html`  
+   - Set:
 
-Open public/index.html
+     ```js
+     const clientId = 'YOUR_CLIENT_ID';
+     ```
 
-Set const clientId = 'YOUR_CLIENT_ID'; to your Genesys Cloud OAuth Client ID
+   - Ensure `regionHost` matches your login host (e.g. `login.usw2.pure.cloud`)
 
-Ensure regionHost matches your login host (e.g. login.usw2.pure.cloud)
+4. **Whitelist Redirect URIs**  
+   In Genesys Cloud, add these to your OAuth client’s **Allowed Redirect URIs**:
 
-4. Whitelist Redirect URIs
+   ```text
+   http://localhost:8000/callback.html
+   http://localhost:8000/wrong_callback.html
+   ```
 
-In Genesys Cloud, add these to your OAuth client’s Allowed Redirect URIs:
+5. **Start the server**  
 
-http://localhost:8000/callback.html
+   ```bash
+   node server.js
+   ```
 
-5. Start the server
-
-```bash
-node server.js
+   The app will run at: [http://localhost:8000](http://localhost:8000)
 
 ## 🎯 Testing
 
-1. Successful flow
+1. **Successful flow**  
+   - Open `http://localhost:8000`  
+   - Click **Login (Correct Redirect)**  
+   - Authenticate in Genesys Cloud  
+   - You should land on `callback.html` showing your `access_token`
 
-- Open http://localhost:8000
+2. **Error flow**  
+   - Return to the home page  
+   - Click **Login (Incorrect Redirect)**  
+   - Genesys Cloud should immediately show “OAuth client ID or redirect URI is invalid”
 
-- Click Login (Correct Redirect)
+## 📖 Further Reading
 
-- Authenticate in Genesys Cloud
+- [Genesys Cloud Implicit Grant Documentation](https://developer.genesys.cloud/authorization/platform-auth/use-implicit-grant)  
 
-- You should land on callback.html showing your access_token
+> **Note:** This is purely a demo. In production, consider using the Authorization Code Grant with PKCE for improved security.
 
-2. Error Flow
+---
 
-- Click Login (Incorrect Redirect)
-
-- Genesys Cloud should immediately show “OAuth client ID or redirect URI is invalid”
-
-## Further Reading
-
-* https://developer.genesys.cloud/authorization/platform-auth/use-implicit-grant
-
-Note: This is purely a demo.
+**— Takuya Sangil**  
+Senior Engineer | Genesys Cloud API & Integrations
